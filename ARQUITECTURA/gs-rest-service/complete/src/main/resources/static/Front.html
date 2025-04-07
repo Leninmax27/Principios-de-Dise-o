@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Greet</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #1e1e1e;
+      color: #00ff88;
+      padding-top: 50px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 40px;
+      color: #888;
+    }
+
+    #formulario {
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+      background-color: #2a2a2a;
+      border: 1px solid #555;
+      color: #00ff88;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="text"]::placeholder {
+      color: #888;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #00ff88;
+      color: #1e1e1e;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #00cc6e;
+    }
+
+    #mensaje {
+      font-size: 32px;
+      text-align: center;
+      background-color: #2a2a2a;
+      padding: 20px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      min-width: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Principios de Diseño - Programación Estructurada</h1>
+  <h2>Lenin Cando</h2>
+
+  <form id="formulario">
+    <input type="text" id="nombreInput" placeholder="> Ingresa tu nombre" required>
+    <button type="submit">Run</button>
+  </form>
+
+  <div id="mensaje">~ waiting for command...</div>
+
+  <script>
+    const form = document.getElementById('formulario');
+    const input = document.getElementById('nombreInput');
+    const mensajeDiv = document.getElementById('mensaje');
+
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const fullName = input.value.trim();
+      if (!fullName) return;
+
+      const firstName = fullName.split(' ')[0];
+
+      try {
+        const response = await fetch(`http://localhost:8080/greeting?name=${encodeURIComponent(firstName)}`);
+        const data = await response.json();
+        mensajeDiv.textContent = `> ${data.content}`;
+      } catch (error) {
+        mensajeDiv.textContent = '> Error al obtener el saludo.';
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
